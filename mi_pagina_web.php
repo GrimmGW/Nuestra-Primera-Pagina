@@ -48,41 +48,81 @@
     </section>
     <section id="about" class="mt-5">
         <div class="row align-items-center">
-            <div class="col col-lg-4 offset-lg-2">
+            <div class="col-lg-4 offset-lg-2 offset-1 col-10">
                 <h2>Aqui se verá Programación Web</h2>
                 <p class="mt-3">Occaecat ut esse nulla magna officia magna dolor excepteur. Labore reprehenderit et nisi incididunt id. Veniam elit in magna occaecat voluptate excepteur. Tempor sit ut mollit deserunt elit anim qui Lorem adipisicing reprehenderit.</p>
             </div>
-            <div class="col col-lg-3 offset-lg-1 col-sm-12">
+            <div class="col-lg-3 offset-lg-1 offset-1 col-10">
                 <img src="assets/images/ladscape_prueba.jpg" class="img-fluid rounded" alt="Una vista hermosa">
             </div>
         </div>
     </section>
     <section id="contacto" class="bg-dark p-5 text-white mt-5">
-        <form action="">
-            <div class="row">
-                <div class="col col-4 offset-1">
-                    <div class="mb-4">
-                        <label for="inputNombre" class="form-label">Escribe tu nombre</label>
-                        <input type="text" class="form-control bg-dark text-white" id="inputNombre" placeholder="John">
-                    </div>
-                    <div  class="mb-4">
-                        <label for="inputApellido" class="form-label">Escribe tu apellido</label>
-                        <input type="text" class="form-control bg-dark text-white" id="inputApellido" placeholder="Doe">
-                    </div>
-                    <div class="">
-                        <label for="inputEmail" class="form-label">Escribe tu correo</label>
-                        <input type="email" class="form-control bg-dark text-white" id="inputEmail" placeholder="john.doe@email.com">
-                    </div>
-                </div>
-                <div class="col col-6">
-                    <div class="">
-                        <label for="inputComentario" class="form-label">Dejanos tu comentario</label>
-                        <textarea class="form-control bg-dark text-white" id="inputComentario" rows="7"></textarea>
-                        <button type="button" class="btn btn-outline-primary mt-3 px-5"><i class="fa-solid fa-paper-plane"></i></button>
-                    </div>
-                </div>
+    <div class="container-fluid row">
+        <form class="col-lg-4 col-sm-12 p-4" method="POST">
+            <h3 class="text-center">Registro de usuarios</h3>
+            <?php
+            include "model/conn.php";
+            include "controller/new_user.php";
+            include "controller/delete_user.php";
+            
+            ?>
+            <div class="mb-3">
+                <label for="formNombreLabel" class="form-label">Escribe tu Nombre</label>
+                <input type="text" class="form-control bg-dark text-white" name="nombre">
             </div>
+            <div class="mb-3">
+                <label for="formApellidoLabel" class="form-label">Escribe tu Apellido</label>
+                <input type="text" class="form-control bg-dark text-white" name="apellido">
+            </div>
+            <div class="mb-3">
+                <label for="formCedulaLabel" class="form-label">Escribe tu Cedula</label>
+                <input type="number" class="form-control bg-dark text-white" name="cedula">
+            </div>
+            <div class="mb-3">
+                <label for="formCorreoLabel" class="form-label">Escribe tu Correo</label>
+                <input type="email" class="form-control bg-dark text-white" name="correo">
+            </div>
+
+            <button type="submit" class="btn btn-warning" name="btnregistrar" value="ok">Registrar usuario</button>
         </form>
+        <div class="col-lg-8 col-sm-12 p-4 table-responsive">
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Cedula</th>
+                        <th>Correo electronico</th>
+                        <th colspan="2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    include "model/conn.php";
+                    $sql = $conn->query("select * from usuarios");
+                    while ($datos = $sql->fetch_object()){ ?>
+                    <tr>
+                        <td><?= $datos->id ?></td>
+                        <td><?= $datos->nombre ?></td>
+                        <td><?= $datos->apellido ?></td>
+                        <td><?= $datos->cedula ?></td>
+                        <td><?= $datos->email ?></td>
+                        <td>
+                            <a href="edit_index.php?id=<?= $datos->id ?>" class="btn btn-small btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                        </td>
+                        <td>
+                            <a onclick="return confirm('Desear borrar este usuario?')" href="mi_pagina_web.php?id=<?= $datos->id ?>" class="btn btn-small btn-danger"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
     </section>
     <div class="py-4 mt-5" style="background-color: #6451CF;"></div>
     <footer id="footer" class="p-5 bg-dark text-white">
