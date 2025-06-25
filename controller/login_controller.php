@@ -10,6 +10,7 @@ session_start();
             if($datos = $sql->fetch_object()){
                 $_SESSION["id"] = $datos->id;
                 $_SESSION["user"] = $datos->usuario;
+                $_SESSION["admin"] = $datos->admin;
                 header("location:mi_pagina_web.php");
             } else{
                 echo "<div class='alert alert-danger'>Este usuario no existe.</div>";

@@ -1,3 +1,11 @@
+<?php
+
+    if(isset($_SESSION["id"])){
+        header("location: mi_pagina_web.php");
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

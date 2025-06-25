@@ -26,6 +26,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="navbar-nav ms-4 me-auto">
             <a class="navbar-brand" href="#">Programacion IV</a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -63,10 +64,17 @@
             style="background-image: url(assets/images/ladscape_prueba_darken.JPG); height: 100vh; background-size: cover; background-position: center;">
             <div>
                 <h1 style="font-size: 56px;"><b>Bienvenido, <?php echo $_SESSION["user"]?> 👋</b></h1>
+                <?php echo $_SESSION["admin"] ?>
                 <p class="mt-4">Ut do anim cillum occaecat culpa incididunt voluptate dolore est culpa quis Lorem
                     laborum sint.</p>
                 <button type="button" class="btn btn-outline-light me-3">Iniciar sesión</button>
-                <button type="button" class="btn btn-light px-5">Registrarse</button>
+                <?php
+                    if($_SESSION["admin"] == 1){
+                        echo "<a href='admin.php' class='btn btn-light px-5'>Ver menu de administrador</a>";
+
+                    }
+                
+                ?>
             </div>
         </div>
     </section>
@@ -112,6 +120,10 @@
 
                 <button type="submit" class="btn btn-warning" name="btnregistrar" value="ok">Registrar usuario</button>
             </form>
+            <?php
+                include "model/conn.php";
+                $sql = $conn->query("select * from usuarios");
+            ?>
             <div class="col-lg-8 col-sm-12 p-4 table-responsive">
                 <table class="table table-hover table-dark">
                     <thead>
@@ -121,13 +133,15 @@
                             <th>Apellido</th>
                             <th>Cedula</th>
                             <th>Correo electronico</th>
-                            <th colspan="2">Acciones</th>
+                            <?php 
+                                if($_SESSION["admin"] == 1){
+                                    echo "<th colspan='2'>Acciones</th>";
+                                }
+                            ?>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        include "model/conn.php";
-                        $sql = $conn->query("select * from usuarios");
+                        <?php 
                         while ($datos = $sql->fetch_object()) { ?>
                             <tr>
                                 <td><?= $datos->id ?></td>
@@ -135,15 +149,16 @@
                                 <td><?= $datos->apellido ?></td>
                                 <td><?= $datos->cedula ?></td>
                                 <td><?= $datos->email ?></td>
-                                <td>
-                                    <a href="edit_index.php?id=<?= $datos->id ?>" class="btn btn-small btn-warning"><i
-                                            class="fa-solid fa-pencil"></i></a>
+                                <?php
+                                    if($_SESSION["admin"] == 1){
+                                        echo "<td>
+                                    <a href='edit_index.php?id=$datos->id' class='btn btn-small btn-warning'><i class='fa-solid fa-pencil'></i></a>
                                 </td>
                                 <td>
-                                    <a onclick="return confirm('Desear borrar este usuario?')"
-                                        href="mi_pagina_web.php?id=<?= $datos->id ?>" class="btn btn-small btn-danger"><i
-                                            class="fa-solid fa-trash-can"></i></a>
-                                </td>
+                                    <a onclick='return confirm('Desear borrar este usuario?')' href='mi_pagina_web.php?id=$datos->id' class='btn btn-small btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                </td>";
+                                    }
+                                ?>
                             </tr>
                             <?php
                         }
